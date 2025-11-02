@@ -1,5 +1,5 @@
 
-const API_URL = 'https://shareef-construction-api.onrender.com/api/contact';
+const API_URL = 'https://construction-mail-server.onrender.com/api/contact';
 // ===== UI Interactions =====
 
 // Mobile nav toggle

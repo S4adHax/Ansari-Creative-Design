@@ -1,3 +1,5 @@
+
+const API_URL = 'https://shareef-construction-api.onrender.com/api/contact';
 // ===== UI Interactions =====
 
 // Mobile nav toggle
@@ -71,13 +73,29 @@ if (gallery) {
   document.getElementById('loadMore')?.addEventListener('click', () => addImages(6));
 }
 
-// Contact form (front-end only; replace with your backend endpoint)
-document.getElementById('contactForm')?.addEventListener('submit', (e) => {
+// Contact form -> send to backend
+document.getElementById('contactForm')?.addEventListener('submit', async (e) => {
   e.preventDefault();
+  const form = e.target;
   const status = document.getElementById('formStatus');
   status.textContent = 'Sending...';
-  setTimeout(() => {
-    status.textContent = 'Thanks! We will contact you shortly.';
-    e.target.reset();
-  }, 800);
+
+  const data = Object.fromEntries(new FormData(form));
+
+  try {
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    const json = await res.json();
+    if (json.ok) {
+      status.textContent = '✅ Message sent successfully!';
+      form.reset();
+    } else {
+      status.textContent = json.error || '❌ Failed to send. Please try again.';
+    }
+  } catch {
+    status.textContent = '❌ Network error. Please try again.';
+  }
 });
